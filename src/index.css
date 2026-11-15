@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+    background-color: #1a1110;
+    overscroll-behavior: none;
+  }
+
+  /* High-contrast keyboard focus ring */
+  :where(button):focus-visible {
+    outline: 2px solid #fb7185;
+    outline-offset: 2px;
+  }
+}
+
+/* Exposed dark basement brick wall (#1a1110 base) */
+.brick-wall {
+  background-color: #1a1110;
+  background-image:
+    /* Warm studio tungsten overhead spotlight & vignette */
+    radial-gradient(
+      ellipse 85% 45% at 50% 8%,
+      rgba(255, 168, 76, 0.22) 0%,
+      rgba(217, 107, 39, 0.09) 42%,
+      rgba(26, 17, 16, 0.85) 85%,
+      rgba(14, 9, 8, 0.96) 100%
+    ),
+    /* Ambient red/pink neon spill on upper brick */
+    radial-gradient(
+      ellipse 70% 24% at 50% 14%,
+      rgba(255, 45, 95, 0.18) 0%,
+      transparent 75%
+    ),
+    /* Staggered exposed-brick mortar & subtle brick variation */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='44' viewBox='0 0 88 44'%3E%3Crect width='88' height='44' fill='%231a1110'/%3E%3Cg fill-opacity='0.55'%3E%3Crect x='1' y='1' width='41' height='19' rx='1.5' fill='%23251715'/%3E%3Crect x='45' y='1' width='42' height='19' rx='1.5' fill='%23211412'/%3E%3Crect x='-21' y='23' width='42' height='19' rx='1.5' fill='%23201412'/%3E%3Crect x='24' y='23' width='41' height='19' rx='1.5' fill='%23271816'/%3E%3Crect x='68' y='23' width='42' height='19' rx='1.5' fill='%231f1311'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 100% 100%, 100% 100%, 88px 44px;
+}
+
+/* Neon sign tube glow + subtle realistic flicker */
+.neon-sign-text {
+  color: #ffe4eb;
+  text-shadow:
+    0 0 4px rgba(255, 228, 235, 0.95),
+    0 0 10px rgba(255, 59, 107, 0.9),
+    0 0 22px rgba(255, 34, 88, 0.75),
+    0 0 42px rgba(225, 29, 72, 0.55);
+  animation: neon-flicker 6.5s infinite;
+}
+
+.neon-sign-sub {
+  color: #fda4af;
+  text-shadow:
+    0 0 6px rgba(251, 113, 133, 0.85),
+    0 0 16px rgba(244, 63, 94, 0.6);
+}
+
+.neon-frame {
+  box-shadow:
+    inset 0 0 14px rgba(255, 45, 95, 0.35),
+    0 0 20px rgba(255, 45, 95, 0.32),
+    0 8px 24px rgba(0, 0, 0, 0.65);
+}
+
+@keyframes neon-flicker {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  20%,
+  24% {
+    opacity: 0.82;
+    filter: brightness(0.88);
+  }
+  55% {
+    opacity: 0.9;
+    filter: brightness(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-sign-text {
+    animation: none;
+  }
+}
+
+/* Brushed dark-metal telephone housing */
+.brushed-metal {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(160deg, #322f30 0%, #221f20 45%, #171516 100%);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.78),
+    0 0 36px rgba(255, 160, 72, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* Recessed LCD/LED caller-ID display bezel */
+.led-display {
+  background: linear-gradient(180deg, #0b0706 0%, #150c09 100%);
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.95),
+    inset 0 0 16px rgba(245, 158, 11, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.led-amber-glow {
+  color: #ffb020;
+  text-shadow:
+    0 0 6px rgba(255, 176, 32, 0.75),
+    0 0 14px rgba(239, 68, 68, 0.45);
+}
+
+/* Tactile 90s beveled plastic push-button */
+.retro-key {
+  background: linear-gradient(180deg, #3c3837 0%, #2b2726 55%, #1f1c1b 100%);
+  box-shadow:
+    0 5px 0 #0e0c0c,
+    0 7px 10px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.55);
+}
+
+.retro-key:active {
+  box-shadow:
+    0 1px 0 #0e0c0c,
+    0 2px 4px rgba(0, 0, 0, 0.65),
+    inset 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Red HANG UP receiver button */
+.hangup-key {
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 55%, #881313 100%);
+  box-shadow:
+    0 4px 0 #450a0a,
+    0 6px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.hangup-key:active {
+  box-shadow:
+    0 1px 0 #450a0a,
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    inset 0 2px 4px rgba(0, 0, 0, 0.55);
+}
+
+/* Safe-area padding for mobile notches & home indicators */
+.safe-viewport {
+  height: 100dvh;
+  padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  padding-left: max(0.85rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.85rem, env(safe-area-inset-right, 0px));
+}
+
+/* Secret VIP line pulsing gold/pink border around console */
+.secret-console-glow {
+  border-color: rgba(251, 191, 36, 0.85);
+  box-shadow:
+    0 0 18px rgba(251, 191, 36, 0.45),
+    0 0 36px rgba(244, 63, 94, 0.4),
+    0 20px 45px rgba(0, 0, 0, 0.8);
+  animation: secret-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes secret-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 16px rgba(251, 191, 36, 0.45),
+      0 0 34px rgba(244, 63, 94, 0.35),
+      0 20px 45px rgba(0, 0, 0, 0.8);
+  }
+  50% {
+    box-shadow:
+      0 0 26px rgba(251, 191, 36, 0.75),
+      0 0 50px rgba(244, 63, 94, 0.6),
+      0 20px 45px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Animated LCD audio waveform bars */
+.waveform-bar {
+  animation: waveform-bounce 0.75s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+
+@keyframes waveform-bounce {
+  0% {
+    transform: scaleY(0.28);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .secret-console-glow,
+  .waveform-bar {
+    animation: none;
+  }
+}
+
+/* Vintage yellowed-paper index card for Studio Directory modal */
+.index-card {
+  background-color: #f4ebd2;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 23px,
+    rgba(96, 130, 182, 0.22) 23px,
+    rgba(96, 130, 182, 0.22) 24px
+  );
+}
+
+.directory-dialog::backdrop {
+  background: rgba(10, 6, 6, 0.78);
+  backdrop-filter: blur(4px);
+}
