@@ -1,0 +1,18 @@
+{
+  "name": "The Basement Yard Hotline",
+  "short_name": "BY Hotline",
+  "description": "Retro 90s studio hotline for The Basement Yard.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1110",
+  "theme_color": "#1a1110",
+  "icons": [
+    {
+      "src": "/icon-phone.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
