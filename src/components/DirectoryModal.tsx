@@ -39,18 +39,18 @@ export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
         }
       }}
       aria-labelledby="directory-card-title"
-      className="directory-dialog m-auto max-h-[88dvh] w-[calc(100%-2rem)] max-w-sm rounded-xl border-0 bg-transparent p-0 text-stone-900 shadow-2xl"
+      className="directory-dialog m-auto max-h-[88dvh] w-[calc(100%-2rem)] max-w-sm rounded-none border-0 bg-transparent p-0 text-[#1c140e]"
     >
-      <div className="index-card relative flex max-h-[88dvh] flex-col overflow-hidden rounded-xl border-2 border-[#cbb994] shadow-[0_24px_50px_rgba(0,0,0,0.85)]">
-        {/* Vintage Red Index Card Top Margin */}
-        <div className="flex items-start justify-between gap-2 border-b-2 border-rose-700/65 bg-[#efe3c4]/90 px-4 pt-3.5 pb-2.5">
+      <div className="relative flex max-h-[88dvh] flex-col overflow-hidden rounded-none border-4 border-[#0a0a0c] bg-[#f4ebd2] shadow-[6px_6px_0_#000000]">
+        {/* Top Pixel Card Header */}
+        <div className="flex items-start justify-between gap-2 border-b-4 border-[#d92638] bg-[#e8dab8] px-3.5 pt-3 pb-2.5">
           <div>
-            <p className="font-mono text-[9px] font-bold tracking-[0.22em] text-rose-800 uppercase">
+            <p className="font-pixel text-[8px] tracking-wider text-[#b91c1c] uppercase">
               INDEX CARD #90-BY
             </p>
             <h2
               id="directory-card-title"
-              className="mt-0.5 font-mono text-sm leading-snug font-extrabold tracking-[0.06em] text-[#2a1d17] uppercase"
+              className="font-pixel mt-1.5 text-[10px] leading-relaxed text-[#140d08] uppercase"
             >
               SANTAGATO STUDIOS — OFFICIAL EXTENSION LIST
             </h2>
@@ -60,32 +60,32 @@ export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
             type="button"
             onClick={onClose}
             aria-label="Close Studio Directory"
-            className="flex min-h-[44px] min-w-[44px] shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#b9a57e] bg-[#e6d7b4] text-[#3a2920] transition-transform active:scale-95"
+            className="flex min-h-[44px] min-w-[44px] shrink-0 cursor-pointer items-center justify-center rounded-none border-4 border-black bg-[#3a3a42] text-[#ffb000] shadow-[4px_4px_0_#000000] active:translate-y-[4px] active:shadow-none"
           >
             <X aria-hidden="true" className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Scrollable Ruled Card Body */}
-        <div className="overflow-y-auto px-4 py-3 font-mono">
-          <p className="mb-2 text-[10px] font-bold tracking-[0.18em] text-[#6d5843] uppercase">
-            SPEED DIAL EXTENSIONS (PRESS 1 KEY)
+        {/* Scrollable Pixel Index Card Body */}
+        <div className="font-lcd overflow-y-auto px-4 py-3">
+          <p className="font-pixel mb-2 text-[8px] tracking-wider text-[#5c4835] uppercase">
+            SPEED DIAL EXTENSIONS (1 KEY)
           </p>
 
-          <ul className="divide-y divide-[#b8a581]/55">
+          <ul className="divide-y-2 divide-[#c8b691]">
             {ORDERED_SPEED_DIAL_KEYS.map((key) => {
               const entry = SPEED_DIALS[key]
               if (!entry) return null
               return (
                 <li key={key} className="flex items-start gap-3 py-2">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#8c7553] bg-[#e6d6b3] text-xs font-extrabold text-[#2a1d17]">
+                  <span className="font-pixel mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-none border-2 border-black bg-[#323238] text-[10px] text-white shadow-[2px_2px_0_#000000]">
                     {entry.code}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs leading-tight font-bold tracking-wide text-[#241812]">
+                    <p className="text-xl leading-none font-bold tracking-wide text-[#18100b] uppercase">
                       {entry.title}
                     </p>
-                    <p className="mt-0.5 text-[11px] leading-snug text-[#5b4736]">
+                    <p className="mt-0.5 text-base leading-tight text-[#523f2f]">
                       {entry.description}
                     </p>
                   </div>
@@ -95,22 +95,22 @@ export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
           </ul>
 
           {/* Classified / Unlisted Lines */}
-          <div className="mt-4 border-t-2 border-dashed border-[#a68f68] pt-3">
-            <p className="mb-2 flex items-center gap-1.5 text-[10px] font-extrabold tracking-[0.18em] text-rose-900 uppercase">
-              <Lock aria-hidden="true" className="h-3 w-3" />
+          <div className="mt-4 border-t-4 border-dashed border-[#9e8964] pt-3">
+            <p className="font-pixel mb-2.5 flex items-center gap-1.5 text-[8px] tracking-wider text-[#b91c1c] uppercase">
+              <Lock aria-hidden="true" className="h-3 w-3 shrink-0" />
               <span>CLASSIFIED / UNLISTED LINES</span>
             </p>
 
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               {CLASSIFIED_HINTS.map((label, index) => (
                 <li
                   key={index}
-                  className="flex items-center justify-between gap-2 rounded border border-[#c0ab84] bg-[#e8dab8]/75 px-2.5 py-1.5"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-none border-2 border-black bg-[#e8dab8] px-2.5 py-1.5 shadow-[3px_3px_0_#000000]"
                 >
-                  <span className="truncate text-[10px] font-bold tracking-wider text-[#544030]">
+                  <span className="text-base leading-none font-bold tracking-wider text-[#3b2c20]">
                     {label}
                   </span>
-                  <span className="shrink-0 -rotate-2 rounded border border-rose-800/75 bg-rose-900/10 px-1.5 py-0.5 text-[9px] font-black tracking-widest text-rose-900 uppercase">
+                  <span className="font-pixel rounded-none border-2 border-[#b91c1c] bg-[#f4ebd2] px-1.5 py-1 text-[7px] text-[#b91c1c] uppercase">
                     [REDACTED — TRY SPECIAL DATES]
                   </span>
                 </li>

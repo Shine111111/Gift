@@ -42,7 +42,7 @@ const KEYPAD_KEYS: KeypadKey[] = [
 const MAX_DIGITS = 16
 const SPEED_DIAL_DELAY_MS = 1200
 const RING_DURATION_MS = 1500
-const WAVEFORM_HEIGHTS = [45, 85, 60, 100, 70, 92, 50, 80, 65, 95, 55, 75]
+const WAVEFORM_HEIGHTS = [35, 80, 55, 100, 65, 90, 45, 75, 60, 95]
 
 type CallPhase = 'idle' | 'ringing' | 'active'
 
@@ -270,36 +270,30 @@ export function App() {
 
   return (
     <div className="brick-wall safe-viewport relative flex w-full flex-col items-center justify-between overflow-hidden select-none">
-      {/* Subtle overhead studio tungsten cone */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/2 h-56 w-80 -translate-x-1/2 rounded-full bg-amber-500/15 blur-3xl"
-      />
-
-      {/* Glowing Red/Pink Neon Sign Header */}
-      <header className="relative z-10 w-full max-w-sm shrink-0 pt-1">
-        <div className="neon-frame rounded-xl border-2 border-rose-500/75 bg-[#160b0c]/85 px-3 py-2 text-center backdrop-blur-[2px]">
+      {/* Flat 2D Pixel Marquee Header */}
+      <header className="relative z-10 w-full max-w-sm shrink-0 pt-0.5">
+        <div className="pixel-marquee rounded-none px-3 py-2 text-center">
           <h1
-            className="neon-sign-text font-black tracking-[0.12em] uppercase"
+            className="font-pixel pixel-marquee-title uppercase"
             style={{
-              fontSize: 'clamp(1.05rem, 4.4vw, 1.35rem)',
-              lineHeight: 1.15,
+              fontSize: 'clamp(0.68rem, 3.1vw, 0.88rem)',
+              lineHeight: 1.45,
             }}
           >
             THE BASEMENT YARD HOTLINE
           </h1>
-          <p className="neon-sign-sub mt-0.5 text-[10px] font-semibold tracking-[0.28em] uppercase">
+          <p className="font-lcd mt-0.5 text-sm tracking-[0.22em] text-[#ff4d6d] uppercase">
             STUDIO LINE • NYC
           </p>
         </div>
       </header>
 
-      {/* Retro 90s Brushed Dark-Metal Telephone Console */}
-      <main className="relative z-10 flex min-h-0 w-full max-w-sm flex-1 flex-col justify-center py-2.5">
+      {/* 16-Bit Pixel Telephone Console */}
+      <main className="relative z-10 flex min-h-0 w-full max-w-sm flex-1 flex-col justify-center py-2">
         <section
           aria-label="Hotline Telephone Keypad Console"
-          className={`brushed-metal relative flex h-full max-h-[580px] flex-col justify-between overflow-hidden rounded-[1.75rem] border p-3.5 transition-shadow duration-300 sm:p-4 ${
-            isSecretActive ? 'secret-console-glow' : 'border-white/10'
+          className={`pixel-console relative flex h-full max-h-[580px] flex-col justify-between overflow-hidden rounded-none p-3 sm:p-3.5 ${
+            isSecretActive ? 'pixel-console-secret' : ''
           }`}
         >
           {/* Interactive Console Content (inert while disconnected overlay is active) */}
@@ -307,16 +301,17 @@ export function App() {
             inert={!isConnected ? true : undefined}
             className="flex min-h-0 flex-1 flex-col justify-between"
           >
-            {/* Top Housing Hardware Screws, Earpiece Vent & Directory Tab */}
-            <div className="mb-1.5 flex shrink-0 items-center justify-between px-0.5">
+            {/* Top Housing Pixel Screws, Speaker Vent & Directory Button */}
+            <div className="mb-2 flex shrink-0 items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
                   aria-hidden="true"
-                  className="h-2.5 w-2.5 rounded-full border border-black/80 bg-zinc-700 shadow-inner"
+                  className="h-1 w-1 bg-[#0a0a0c] shadow-[1px_1px_0_#52525b]"
                 />
                 <div aria-hidden="true" className="flex items-center gap-1">
-                  <span className="h-1 w-5 rounded-full bg-black/70 shadow-[0_1px_0_rgba(255,255,255,0.08)]" />
-                  <span className="h-1 w-8 rounded-full bg-black/70 shadow-[0_1px_0_rgba(255,255,255,0.08)]" />
+                  <span className="h-1 w-3 bg-[#0a0a0c]" />
+                  <span className="h-1 w-5 bg-[#0a0a0c]" />
+                  <span className="h-1 w-3 bg-[#0a0a0c]" />
                 </div>
               </div>
 
@@ -325,31 +320,30 @@ export function App() {
                 onClick={() => setIsDirectoryOpen(true)}
                 aria-haspopup="dialog"
                 aria-expanded={isDirectoryOpen}
-                className="flex min-h-[32px] cursor-pointer items-center gap-1.5 rounded-md border border-[#cbb994]/45 bg-[#e6d7b4]/15 px-2.5 py-1 font-mono text-[10px] font-bold tracking-[0.14em] text-[#f4ebd2] uppercase shadow-sm transition-transform hover:bg-[#e6d7b4]/25 active:scale-95"
+                className="pixel-btn-small font-pixel flex min-h-[32px] cursor-pointer items-center gap-1.5 rounded-none px-2.5 py-1 text-[8px] text-[#f4ebd2] uppercase"
               >
-                <BookOpen aria-hidden="true" className="h-3 w-3 text-amber-300" />
+                <BookOpen
+                  aria-hidden="true"
+                  className="h-3 w-3 text-[#ffb000]"
+                />
                 <span>DIRECTORY</span>
               </button>
             </div>
 
-            {/* Retro Digital LCD/LED Caller-ID Display Bar */}
-            <div
-              className={`led-display mb-2.5 shrink-0 rounded-xl border px-3.5 py-2.5 ${
-                isSecretActive ? 'border-amber-400/50' : 'border-stone-800'
-              }`}
-            >
-              <div className="flex items-center justify-between font-mono text-[10px] tracking-widest text-amber-500/80 uppercase">
+            {/* 2D Pixel LCD Caller-ID Display Bar */}
+            <div className="pixel-lcd mb-2.5 shrink-0 rounded-none px-3 py-2">
+              <div className="font-lcd flex items-center justify-between text-base leading-none tracking-wider text-[#ffb000] uppercase">
                 <span className="flex items-center gap-1.5">
                   <span
                     aria-hidden="true"
-                    className={`inline-block h-1.5 w-1.5 rounded-full ${
+                    className={`inline-block h-2 w-2 rounded-none ${
                       !isConnected
-                        ? 'bg-stone-600'
+                        ? 'bg-[#3f3f46]'
                         : callPhase === 'active'
-                          ? 'bg-rose-500 shadow-[0_0_8px_#f43f5e]'
+                          ? 'bg-[#ff2a55]'
                           : callPhase === 'ringing' || dialed
-                            ? 'bg-red-500 shadow-[0_0_6px_#ef4444]'
-                            : 'bg-amber-400 shadow-[0_0_6px_#fbbf24]'
+                            ? 'bg-[#d92638]'
+                            : 'bg-[#ffb000]'
                     }`}
                   />
                   CALLER ID
@@ -357,7 +351,7 @@ export function App() {
                 <span
                   aria-live="polite"
                   className={
-                    isSecretActive ? 'font-bold text-amber-300' : undefined
+                    isSecretActive ? 'font-bold text-[#ff4d6d]' : undefined
                   }
                 >
                   {statusText}
@@ -367,29 +361,29 @@ export function App() {
               <div
                 role="status"
                 aria-label="Caller ID display"
-                className="led-amber-glow mt-1 flex min-h-[2.25rem] flex-col justify-center overflow-hidden font-mono"
+                className="font-lcd mt-1 flex min-h-[2.25rem] flex-col justify-center overflow-hidden text-[#ffb000]"
               >
                 {callPhase === 'ringing' && activeEntry ? (
                   <div className="flex items-center justify-between gap-2">
-                    <span className="truncate text-sm font-bold tracking-[0.12em]">
+                    <span className="truncate text-xl leading-none tracking-wider uppercase">
                       {activeEntry.title}
                     </span>
-                    <span className="shrink-0 text-xs tracking-widest text-rose-400 motion-safe:animate-pulse">
+                    <span className="font-pixel shrink-0 text-[8px] text-[#ff4d6d] motion-safe:animate-pulse">
                       RINGING...
                     </span>
                   </div>
                 ) : callPhase === 'active' && activeEntry ? (
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-xs font-bold tracking-[0.12em] text-amber-300">
+                      <div className="truncate text-lg leading-none tracking-wider text-[#ffb000] uppercase">
                         {activeEntry.title}
                       </div>
-                      <div className="truncate text-[10px] tracking-[0.08em] text-rose-300/90">
+                      <div className="truncate text-sm leading-tight tracking-wide text-[#ff8fa3]">
                         {fallbackNotice || activeEntry.description}
                       </div>
                     </div>
 
-                    {/* Animated CSS Audio Waveform Visualizer */}
+                    {/* Blocky Square Pixel Audio Waveform Visualizer */}
                     <div
                       aria-hidden="true"
                       className="flex h-6 shrink-0 items-end gap-[3px] pr-0.5"
@@ -397,72 +391,70 @@ export function App() {
                       {WAVEFORM_HEIGHTS.map((height, idx) => (
                         <span
                           key={idx}
-                          className={`waveform-bar w-[3px] rounded-full ${
-                            isSecretActive
-                              ? 'bg-gradient-to-t from-rose-500 to-amber-300'
-                              : 'bg-amber-400'
+                          className={`waveform-bar w-[4px] rounded-none ${
+                            isSecretActive ? 'bg-[#ff2a55]' : 'bg-[#ffb000]'
                           }`}
                           style={{
                             height: `${height}%`,
-                            animationDelay: `${(idx % 5) * 0.11}s`,
+                            animationDelay: `${(idx % 5) * 0.1}s`,
                           }}
                         />
                       ))}
                     </div>
                   </div>
                 ) : dialed ? (
-                  <div className="flex items-center justify-end text-2xl font-bold tracking-[0.14em]">
+                  <div className="flex items-center justify-end text-3xl leading-none tracking-[0.16em]">
                     <span className="truncate">{dialed}</span>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-end text-base tracking-[0.2em] text-amber-500/40">
+                  <div className="flex items-center justify-end text-xl leading-none tracking-[0.18em] text-[#ffb000]/45">
                     <span>ENTER NUMBER_</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Control Bar: CLEAR & Red HANG UP Receiver Button */}
+            {/* Control Bar: CLEAR & Red HANG UP Pixel Buttons */}
             <div className="mb-3 grid shrink-0 grid-cols-2 gap-2.5">
               <button
                 type="button"
                 onClick={handleClear}
                 disabled={callPhase !== 'idle'}
-                className="retro-key flex min-h-[44px] cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold tracking-[0.16em] text-stone-100 uppercase transition-transform duration-75 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                className="pixel-btn-clear font-pixel flex min-h-[44px] cursor-pointer items-center justify-center gap-1.5 rounded-none px-2 py-2 text-[9px] uppercase active:translate-y-[4px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <Delete aria-hidden="true" className="h-4 w-4 text-amber-400" />
+                <Delete aria-hidden="true" className="h-4 w-4 shrink-0" />
                 <span>CLEAR</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleHangUp}
-                className="hangup-key flex min-h-[44px] cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-red-400/30 px-3 py-2 text-xs font-bold tracking-[0.16em] text-white uppercase transition-transform duration-75 active:scale-95"
+                className="pixel-btn-hangup font-pixel flex min-h-[44px] cursor-pointer items-center justify-center gap-1.5 rounded-none px-2 py-2 text-[9px] uppercase active:translate-y-[4px] active:shadow-none"
               >
-                <PhoneOff aria-hidden="true" className="h-4 w-4" />
+                <PhoneOff aria-hidden="true" className="h-4 w-4 shrink-0" />
                 <span>HANG UP</span>
               </button>
             </div>
 
-            {/* Recessed Keypad Well: Tactile 90s Push-Button Grid (1-9, *, 0, #) */}
-            <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-4 gap-2.5 rounded-2xl border border-black/70 bg-[#121011]/90 p-2.5 shadow-[inset_0_3px_10px_rgba(0,0,0,0.85)]">
+            {/* Recessed Keypad Well: Tactile 2D Pixel Push-Button Grid */}
+            <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-4 gap-2.5 rounded-none border-4 border-[#0a0a0c] bg-[#141417] p-2.5 shadow-[inset_4px_4px_0_#09090b]">
               {KEYPAD_KEYS.map(({ digit, letters, accentRed }) => (
                 <button
                   key={digit}
                   type="button"
                   onClick={() => handleDigitPress(digit)}
                   aria-label={letters ? `${digit} ${letters}` : digit}
-                  className="retro-key flex min-h-[44px] cursor-pointer flex-col items-center justify-center rounded-xl border border-white/10 px-2 py-1 transition-transform duration-75 active:scale-95"
+                  className="pixel-btn-key flex min-h-[44px] cursor-pointer flex-col items-center justify-center rounded-none px-1 py-1 active:translate-y-[4px] active:shadow-none"
                 >
                   <span
-                    className={`text-2xl leading-none font-extrabold tracking-tight ${
-                      accentRed ? 'text-rose-400' : 'text-stone-50'
+                    className={`font-pixel text-base leading-none ${
+                      accentRed ? 'text-[#ff2a55]' : 'text-white'
                     }`}
                   >
                     {digit}
                   </span>
                   {letters && (
-                    <span className="mt-0.5 text-[9px] font-bold tracking-[0.18em] text-rose-400/95">
+                    <span className="font-pixel mt-1.5 text-[7px] leading-none text-[#ff4d6d]">
                       {letters}
                     </span>
                   )}
@@ -470,49 +462,49 @@ export function App() {
               ))}
             </div>
 
-            {/* Bottom Housing Rivets */}
-            <div className="mt-2 flex shrink-0 items-center justify-between px-1">
+            {/* Bottom Housing Pixel Screws & Model Stamp */}
+            <div className="mt-2 flex shrink-0 items-center justify-between px-0.5">
               <span
                 aria-hidden="true"
-                className="h-2.5 w-2.5 rounded-full border border-black/80 bg-zinc-700 shadow-inner"
+                className="h-1 w-1 bg-[#0a0a0c] shadow-[1px_1px_0_#52525b]"
               />
-              <span className="font-mono text-[9px] tracking-[0.24em] text-stone-500 uppercase">
+              <span className="font-lcd text-sm leading-none tracking-[0.2em] text-[#71717a] uppercase">
                 MODEL TBY-90S
               </span>
               <span
                 aria-hidden="true"
-                className="h-2.5 w-2.5 rounded-full border border-black/80 bg-zinc-700 shadow-inner"
+                className="h-1 w-1 bg-[#0a0a0c] shadow-[1px_1px_0_#52525b]"
               />
             </div>
           </div>
 
-          {/* Disconnected State Overlay */}
+          {/* Flat 2D Pixel Disconnected Overlay */}
           {!isConnected && (
             <div
               role="dialog"
               aria-modal="true"
               aria-labelledby="receiver-connect-heading"
-              className="absolute inset-0 z-20 flex flex-col items-center justify-between rounded-[1.75rem] bg-[#0e0909]/88 px-6 py-6 text-center backdrop-blur-sm"
+              className="absolute inset-0 z-20 flex flex-col items-center justify-between rounded-none border-4 border-[#ff2a55] bg-[#141417]/95 px-5 py-6 text-center"
             >
               <div className="flex flex-1 flex-col items-center justify-center">
-                {/* Pulsing USB-C / Red Receiver Icon */}
+                {/* Pixel USB-C / Red Receiver Badge */}
                 <div
                   aria-hidden="true"
-                  className="mb-5 flex items-center gap-3 rounded-2xl border border-rose-500/40 bg-rose-950/40 px-4 py-3 shadow-[0_0_25px_rgba(244,63,94,0.28)] motion-safe:animate-pulse"
+                  className="mb-5 flex items-center gap-3 rounded-none border-4 border-black bg-[#252529] px-4 py-3 shadow-[4px_4px_0_#000000] motion-safe:animate-pulse"
                 >
-                  <Usb className="h-7 w-7 text-amber-400" />
-                  <span className="h-0.5 w-4 rounded-full bg-rose-400/70" />
-                  <Phone className="h-7 w-7 text-rose-500" />
+                  <Usb className="h-6 w-6 text-[#ffb000]" />
+                  <span className="h-1 w-4 bg-[#ff2a55]" />
+                  <Phone className="h-6 w-6 text-[#d92638]" />
                 </div>
 
                 <h2
                   id="receiver-connect-heading"
-                  className="max-w-[26ch] text-base font-extrabold tracking-[0.12em] text-stone-100 uppercase sm:text-lg"
+                  className="font-pixel max-w-[24ch] text-xs leading-relaxed text-white uppercase"
                 >
                   PLUG IN YOUR RED RECEIVER TO CONNECT TO THE STUDIO
                 </h2>
 
-                <p className="mt-2 max-w-[30ch] text-xs leading-relaxed text-stone-400">
+                <p className="font-lcd mt-3 max-w-[30ch] text-lg leading-tight text-stone-300">
                   Connect your USB-C handset, then tap below if the line
                   doesn&apos;t activate automatically.
                 </p>
@@ -520,7 +512,7 @@ export function App() {
                 {error && (
                   <p
                     role="alert"
-                    className="mt-3 max-w-[30ch] rounded-lg border border-amber-500/30 bg-amber-950/50 px-3 py-1.5 text-[11px] text-amber-300"
+                    className="font-lcd mt-3 max-w-[30ch] rounded-none border-2 border-[#ffb000] bg-[#181c10] px-3 py-1.5 text-base leading-tight text-[#ffb000]"
                   >
                     {error}
                   </p>
@@ -530,9 +522,9 @@ export function App() {
                   type="button"
                   onClick={() => void connectReceiver()}
                   disabled={isConnecting}
-                  className="hangup-key mt-5 flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-400/35 px-6 py-3 text-xs font-extrabold tracking-[0.18em] text-white uppercase transition-transform duration-75 active:scale-95 disabled:cursor-wait disabled:opacity-70"
+                  className="pixel-btn-hangup font-pixel mt-5 flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-none px-5 py-3 text-[10px] uppercase active:translate-y-[4px] active:shadow-none disabled:cursor-wait disabled:opacity-70"
                 >
-                  <Phone aria-hidden="true" className="h-4 w-4" />
+                  <Phone aria-hidden="true" className="h-4 w-4 shrink-0" />
                   <span>{isConnecting ? 'ACTIVATING...' : 'ACTIVATE LINE'}</span>
                 </button>
               </div>
@@ -540,7 +532,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => void enableBypassMode()}
-                className="min-h-[44px] cursor-pointer px-3 py-2 text-[11px] font-medium tracking-wide text-stone-400 underline decoration-stone-600 underline-offset-4 transition-colors hover:text-stone-200"
+                className="font-lcd min-h-[44px] cursor-pointer px-3 py-2 text-lg tracking-wide text-stone-400 underline decoration-stone-500 underline-offset-4 hover:text-white"
               >
                 Test Without Handset
               </button>
