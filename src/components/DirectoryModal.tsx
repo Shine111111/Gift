@@ -1,21 +1,34 @@
 import { useEffect, useRef } from 'react'
-import { Lock, X } from 'lucide-react'
-import { SPEED_DIALS } from '../data/hotlineDirectory'
+import { Lock, Unlock, X } from 'lucide-react'
+import { SECRET_CODES, SPEED_DIALS } from '../data/hotlineDirectory'
 
 interface DirectoryModalProps {
   isOpen: boolean
   onClose: () => void
+  unlockedCodes: string[]
+  onSelectCode?: (code: string) => void
 }
 
-const ORDERED_SPEED_DIAL_KEYS = ['1', '2', '3', '4', '5', '0'] as const
-
-const CLASSIFIED_HINTS = [
-  'SPECIAL OCCASION • EXT. [????]',
-  'STUDIO ARCHIVE • EXT. [????]',
-  'VAULT TAPE • EXT. [????]',
+const ORDERED_SPEED_DIAL_KEYS = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '*',
+  '0',
 ] as const
 
-export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
+export function DirectoryModal({
+  isOpen,
+  onClose,
+  unlockedCodes,
+  onSelectCode,
+}: DirectoryModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -28,6 +41,11 @@ export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
       dialog.close()
     }
   }, [isOpen])
+
+  const secretEntries = Object.values(SECRET_CODES)
+  const unlockedCount = secretEntries.filter((entry) =>
+    unlockedCodes.includes(entry.code),
+  ).length
 
   return (
     <dialog
@@ -69,7 +87,7 @@ export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
         {/* Scrollable Pixel Index Card Body */}
         <div className="font-lcd overflow-y-auto px-4 py-3">
           <p className="font-pixel mb-2 text-[8px] tracking-wider text-[#5c4835] uppercase">
-            SPEED DIAL EXTENSIONS (1 KEY)
+            SPEED DIALS (PRESS 1 KEY)
           </p>
 
           <ul className="divide-y-2 divide-[#c8b691]">
@@ -94,27 +112,72 @@ export function DirectoryModal({ isOpen, onClose }: DirectoryModalProps) {
             })}
           </ul>
 
-          {/* Classified / Unlisted Lines */}
+          {/* Classified / Unlisted Lines Scavenger Hunt */}
           <div className="mt-4 border-t-4 border-dashed border-[#9e8964] pt-3">
-            <p className="font-pixel mb-2.5 flex items-center gap-1.5 text-[8px] tracking-wider text-[#b91c1c] uppercase">
+            <p className="font-pixel mb-2.5 flex items-center gap-1.5 text-[8px] leading-relaxed tracking-wider text-[#b91c1c] uppercase">
               <Lock aria-hidden="true" className="h-3 w-3 shrink-0" />
-              <span>CLASSIFIED / UNLISTED LINES</span>
+              <span>
+                CLASSIFIED / UNLISTED LINES ({unlockedCount} /{' '}
+                {secretEntries.length} UNLOCKED)
+              </span>
             </p>
 
-            <ul className="space-y-2">
-              {CLASSIFIED_HINTS.map((label, index) => (
-                <li
-                  key={index}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-none border-2 border-black bg-[#e8dab8] px-2.5 py-1.5 shadow-[3px_3px_0_#000000]"
-                >
-                  <span className="text-base leading-none font-bold tracking-wider text-[#3b2c20]">
-                    {label}
-                  </span>
-                  <span className="font-pixel rounded-none border-2 border-[#b91c1c] bg-[#f4ebd2] px-1.5 py-1 text-[7px] text-[#b91c1c] uppercase">
-                    [REDACTED — TRY SPECIAL DATES]
-                  </span>
-                </li>
-              ))}
+            <ul className="space-y-2.5">
+              {secretEntries.map((entry) => {
+                const isUnlocked = unlockedCodes.includes(entry.code)
+
+                if (isUnlocked) {
+                  return (
+                    <li key={entry.code}>
+                      <button
+                        type="button"
+                        onClick={() => onSelectCode?.(entry.code)}
+                        className="w-full cursor-pointer rounded-none border-2 border-black bg-[#fff7dc] p-2.5 text-left shadow-[3px_3px_0_#000000] transition-transform hover:bg-[#fff2c2] active:translate-y-[2px] active:shadow-none"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-1.5">
+                          <span className="font-pixel rounded-none border-2 border-black bg-[#252529] px-1.5 py-0.5 text-[8px] text-[#ffb000]">
+                            EXT. {entry.code}
+                          </span>
+                          <span className="font-pixel rounded-none border-2 border-[#15803d] bg-[#dcfce7] px-1.5 py-0.5 text-[7px] text-[#15803d] uppercase">
+                            [DECLASSIFIED]
+                          </span>
+                        </div>
+                        <p className="mt-1.5 flex items-center gap-1.5 text-xl leading-none font-bold tracking-wide text-[#18100b] uppercase">
+                          <Unlock
+                            aria-hidden="true"
+                            className="h-3.5 w-3.5 shrink-0 text-[#15803d]"
+                          />
+                          <span>{entry.title}</span>
+                        </p>
+                        <p className="mt-0.5 text-base leading-tight text-[#523f2f]">
+                          {entry.description} • Tap to dial
+                        </p>
+                      </button>
+                    </li>
+                  )
+                }
+
+                return (
+                  <li
+                    key={entry.code}
+                    className="rounded-none border-2 border-black bg-[#e8dab8] p-2.5 shadow-[3px_3px_0_#000000]"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                      <span className="text-base leading-none font-bold tracking-wider text-[#3b2c20]">
+                        CLASSIFIED FILE • EXT. [{'?'.repeat(entry.code.length)}]
+                      </span>
+                      <span className="font-pixel rounded-none border-2 border-[#b91c1c] bg-[#f4ebd2] px-1.5 py-0.5 text-[7px] text-[#b91c1c] uppercase">
+                        [REDACTED — DIAL CODE TO UNLOCK]
+                      </span>
+                    </div>
+                    {entry.hint && (
+                      <p className="mt-1.5 text-base leading-tight text-[#523f2f]">
+                        HINT: {entry.hint}
+                      </p>
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </div>

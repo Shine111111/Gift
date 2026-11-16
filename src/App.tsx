@@ -5,7 +5,7 @@ import {
   type HotlineEntry,
   SECRET_CODES,
   SPEED_DIALS,
-  resolveHotlineEntry,
+  resolveHotlineTrack,
 } from './data/hotlineDirectory'
 import { useHandsetDetector } from './hooks/useHandsetDetector'
 import {
@@ -43,6 +43,21 @@ const MAX_DIGITS = 16
 const SPEED_DIAL_DELAY_MS = 1200
 const RING_DURATION_MS = 1500
 const WAVEFORM_HEIGHTS = [35, 80, 55, 100, 65, 90, 45, 75, 60, 95]
+const UNLOCKED_STORAGE_KEY = 'by_hotline_unlocked_codes'
+
+function loadUnlockedCodes(): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = window.localStorage.getItem(UNLOCKED_STORAGE_KEY)
+    if (!raw) return []
+    const parsed: unknown = JSON.parse(raw)
+    return Array.isArray(parsed)
+      ? parsed.filter((item): item is string => typeof item === 'string')
+      : []
+  } catch {
+    return []
+  }
+}
 
 type CallPhase = 'idle' | 'ringing' | 'active'
 
@@ -61,6 +76,20 @@ export function App() {
   const [activeEntry, setActiveEntry] = useState<HotlineEntry | null>(null)
   const [fallbackNotice, setFallbackNotice] = useState<string | null>(null)
   const [isDirectoryOpen, setIsDirectoryOpen] = useState(false)
+  const [unlockedCodes, setUnlockedCodes] = useState<string[]>(loadUnlockedCodes)
+
+  const unlockSecretCode = useCallback((code: string) => {
+    setUnlockedCodes((prev) => {
+      if (prev.includes(code)) return prev
+      const next = [...prev, code]
+      try {
+        window.localStorage.setItem(UNLOCKED_STORAGE_KEY, JSON.stringify(next))
+      } catch {
+        // Ignore storage quota/availability errors
+      }
+      return next
+    })
+  }, [])
 
   const speedDialTimerRef = useRef<number | null>(null)
   const ringTimerRef = useRef<number | null>(null)
@@ -108,7 +137,7 @@ export function App() {
       clearPendingTimers()
       stopDialTone()
 
-      const entry = resolveHotlineEntry(rawEntry)
+      const { entry, file } = resolveHotlineTrack(rawEntry)
       const sessionId = ++callSessionRef.current
 
       setActiveEntry(entry)
@@ -126,7 +155,7 @@ export function App() {
         setCallPhase('active')
 
         playHotlineTrack({
-          file: entry.file,
+          file,
           onFallback: (filename) => {
             if (callSessionRef.current !== sessionId) return
             setFallbackNotice(`AUDIO FILE READY: ${filename}`)
@@ -188,6 +217,7 @@ export function App() {
       // 1. Multi-digit secret codes trigger immediately and override single-digit timer
       const secretMatch = SECRET_CODES[nextDialed]
       if (secretMatch) {
+        unlockSecretCode(secretMatch.code)
         startCallFlow(secretMatch)
         return
       }
@@ -201,7 +231,22 @@ export function App() {
         }, SPEED_DIAL_DELAY_MS)
       }
     },
-    [callPhase, dialed, isConnected, startCallFlow],
+    [callPhase, dialed, isConnected, startCallFlow, unlockSecretCode],
+  )
+
+  const handleSelectUnlockedCode = useCallback(
+    (code: string) => {
+      setIsDirectoryOpen(false)
+      if (!isConnected) return
+      const secretMatch = SECRET_CODES[code]
+      if (!secretMatch) return
+      clearPendingTimers()
+      stopAllCallAudio()
+      setDialed(code)
+      unlockSecretCode(secretMatch.code)
+      startCallFlow(secretMatch)
+    },
+    [clearPendingTimers, isConnected, startCallFlow, unlockSecretCode],
   )
 
   const handleClear = useCallback(() => {
@@ -544,6 +589,8 @@ export function App() {
       <DirectoryModal
         isOpen={isDirectoryOpen}
         onClose={() => setIsDirectoryOpen(false)}
+        unlockedCodes={unlockedCodes}
+        onSelectCode={handleSelectUnlockedCode}
       />
     </div>
   )
