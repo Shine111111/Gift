@@ -20,6 +20,7 @@ export const SPEED_DIALS: Record<string, HotlineEntry> = {
       'audio/didyouyesididjoemadatfrank.mp3',
       'audio/howmanytimesnumbersjoemadatfrankie.mp3',
       'audio/joeopenyoureyesthenthomadatfrankie.mp3',
+      'audio/poptart_flavor.mp3',
     ],
   },
   '2': {
